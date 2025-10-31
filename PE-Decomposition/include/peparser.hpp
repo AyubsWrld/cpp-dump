@@ -18,14 +18,16 @@ namespace Flexxer
 
       ~NTParser();
 
-      bool IsValid() ;
+      bool IsPortableExecutable();
 
       bool ImageType();
 
-      std::optional<IMAGE_DOS_HEADER> ParseHeader();
+      std::optional<IMAGE_DOS_HEADER> ParseMSDOSHeader();
+      std::optional<IMAGE_FILE_HEADER> ParsePEHeader(LONG HeaderOffset);
 
     private:
 
+      void Rewind() { m_executable.seekg(0); }  // Not terribly descriptive 
       bool IsOpen() const { return m_executable.is_open(); }
 
       LONG HeaderOffset();

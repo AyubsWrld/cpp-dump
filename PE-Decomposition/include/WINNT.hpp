@@ -31,7 +31,7 @@ typedef struct _IMAGE_DOS_HEADER {  // DOS .EXE header
     USHORT e_oeminfo;       // OEM information; e_oemid specific
     USHORT e_res2[10];      // Reserved words
     LONG   e_lfanew;        // File address of new exe header
-  } IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
+} IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
 
 typedef struct _IMAGE_FILE_HEADER {
     USHORT  Machine;

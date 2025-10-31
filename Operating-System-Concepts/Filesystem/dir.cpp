@@ -18,5 +18,7 @@ struct FDirectory
 
 int main (int argc, char *argv[]) 
 {
+  int value[5]{}; 
+  auto p{&value};
   return 0;
 }
