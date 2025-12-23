@@ -1,40 +1,48 @@
-#include <iostream>
+#include <print>
+#include <memory>
 
 
-template<typename T>
-struct Point
+struct Object 
 {
-  T m_x ; 
-  T m_y ; 
+    template<typename T> 
+    Object(T&& m_obj)
+        : object(std::make_unique<Model<T>>(std::forward<T>(m_obj)))
+    {}
 
-private:
+    void Speak() { object->Speak(); }
 
-  T m_z ; 
+    struct Concept 
+    {
+        virtual ~Concept() = default; 
+        virtual void Speak() = 0;
+    };
 
 
-  Point(const T& x, const T& y, const T& z)
-    : m_x{x},
-      m_y{y},
-      m_z{z} 
-  {
+    template<typename T>
+    struct Model : public Concept 
+    {
+        T obj; 
+        Model(const T& t) 
+            : obj(t)
+        {}
+        void Speak() override 
+        {
+            obj.Speak();
+        }
+    };
 
-  }
-
-  bool operator==(const Point<T>& Other);
-
+    std::unique_ptr<Concept> object ;
 };
 
-template<typename T>
-bool Point<T>::operator==(const Point<T>& Other)
+struct Foo 
 {
-  return ( 
-            m_x == Other.m_x &&
-            m_y == Other.m_y  
-          );
-}
-
+    void Speak() { std::println("Foo"); }
+};
 
 int main(int argc, char *argv[])
 {
-  return EXIT_SUCCESS;
+    Object s = Foo{}; 
+
+    s.Speak();
+    return EXIT_SUCCESS;
 }

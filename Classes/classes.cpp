@@ -1,38 +1,40 @@
 #include <iostream>
+#include <type_traits>
+#include <functional>
 
-class Point
+template <typename DelegateSignature>
+class TDelegate
 {
-  int m_x{} ; 
-  int m_y{} ; 
-
-public:
-  const static int m_z{};
-  Point(int x = 0, int y = 0)
-    : m_x(x),
-      m_y(y) 
-  {
-
-  }
-
-
-  //Point(const Point& other) = delete;
-  Point(const Point& other)
-    : m_x(other.m_x),
-      m_y(other.m_y)
-  {
-    std::cout << "Copy constructor called" << std::endl; 
-  }
-
-  // Point(const Point& other)
-  // {
-  //   std::cout << "Copy constructor called" << std::endl; 
-  // }
 
 };
 
+template <typename InRetValType, typename... ParamTypes>
+class TDelegate<InRetValType(ParamTypes...)> 
+{
+
+public:
+
+    using RetValType = InRetValType;
+    using TFuncType  = InRetValType(ParamTypes...);
+
+    TDelegate() = default;
+    TDelegate(TDelegate&& Other) = default;
+    TDelegate& operator=(TDelegate&& Other) = default;
+    ~TDelegate() = default;
+
+};
+
+class UObjectManager 
+{
+    std::function<void()> S { [](){ std::cout << "Hello World"; } };
+};
+
+
+
 int main () 
 {
-  Point p{1,2}; 
-  auto y{p};
-  return 0;
+
+    std::cout << std::is_same<void(void),void(void)>::value;
+    std::cout << std::is_same<void(void), TDelegate<void(void)>::TFuncType>::value;
+    return 0;
 }
